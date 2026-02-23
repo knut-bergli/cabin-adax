@@ -1,11 +1,6 @@
 import fastapi
 from fastapi_chameleon import template
-import app.services.data_service as data_service
-
-# router = fastapi.APIRouter(
-#     prefix="/",
-#     tags=["display_panel"]
-# )
+from app.services import data_service
 
 router = fastapi.APIRouter()
 

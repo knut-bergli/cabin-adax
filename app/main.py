@@ -1,15 +1,13 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-import fastapi
 import fastapi_chameleon
 import uvicorn
 from fastapi import FastAPI
-from fastapi_chameleon import template
 from starlette.staticfiles import StaticFiles
 
-from app.services import data_service
+from app.routers import home
 
-from routers import display_panel
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,15 +18,6 @@ async def lifespan(app: FastAPI):
     # Possible clean up code here
 
 app = FastAPI(lifespan=lifespan)
-
-
-def setup_chameleon():
-    fastapi_chameleon.global_init('templates')
-
-
-@app.on_event("startup")
-def startup_event():
-    setup_chameleon()
 
 
 def configure(dev_mode: bool):
@@ -48,13 +37,15 @@ def configure(dev_mode: bool):
 
 
 def configure_templates(dev_mode: bool):
-    fastapi_chameleon.global_init('templates', auto_reload=dev_mode)
+    template_folder = Path(__file__).parent / 'templates'
+    fastapi_chameleon.global_init(str(template_folder), auto_reload=dev_mode)
 
 
 def configure_routes():
-    app.mount('/static', StaticFiles(directory='static'), name='static')
+    static_folder = Path(__file__).parent / 'static'
+    app.mount('/static', StaticFiles(directory=str(static_folder)), name='static')
 
-    app.include_router(display_panel.router)
+    app.include_router(home.router)
 
 
 def main():
@@ -66,13 +57,13 @@ def main():
     # log_cfg = str(resolve_path('config_files/logging.yaml'))
     # if not Path(log_cfg).exists():
     #     log_cfg = None
-    uvicorn.run(app, host='0.0.0.0', port=8080, log_config=log_cfg)
+    uvicorn.run(app, host='0.0.0.0', port=8080) #, log_config=log_cfg)
 
 
 
 if __name__ == '__main__':
     main()
 else:
-    pass
-    # configure(dev_mode=get_settings().DEV_MODE)
+    # Configure when module is imported (e.g., by uvicorn)
+    configure(dev_mode=True)
 
