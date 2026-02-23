@@ -33,5 +33,6 @@ def set_temp(room_id: str, setpoint: float = fastapi.Form(...)):
     data_service.update_room_setpoint(room_id, setpoint)
     return fastapi.responses.RedirectResponse(url='/', status_code=303)
 
+
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)

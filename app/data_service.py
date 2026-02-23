@@ -1,4 +1,4 @@
-from models import Room, Heater
+from app.models import Room, Heater
 
 # Mock data
 rooms = [
