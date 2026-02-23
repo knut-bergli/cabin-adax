@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabin Temperature Control</title>
+    <link rel="stylesheet" href="static/css/site.css">
+</head>
+<body>
+
+<header>
+    <h1>Cabin Heating Dashboard</h1>
+</header>
+
+<main class="container" metal:define-slot="content">
+    Page content goes here.
+</main>
+
+<footer>
+    <p>&copy; 2026 Cabin Heating Control</p>
+</footer>
+
+</body>
+</html>
