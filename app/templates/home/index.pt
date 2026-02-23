@@ -1,0 +1,33 @@
+<div metal:use-macro="load: ../shared/_layout.pt"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal">
+    <main metal:fill-slot="content" class="container">
+        <div class="room-grid">
+            <div tal:repeat="room rooms" class="room-card">
+                <h2 tal:content="room.name">Room Name</h2>
+                <div class="room-info">
+                    <p class="current-temp">Avg: <span tal:replace="python: '{:.1f}'.format(room.average_temp)">&deg;C</span></p>
+                    <p class="current-setpoint">Setpoint: <span tal:replace="python: '{:.1f}'.format(room.current_setpoint)">&deg;C</span></p>
+                </div>
+                
+                <form tal:attributes="action python: '/set_temp/{}'.format(room.id)" method="post" class="setpoint-form">
+                    <input type="number" name="setpoint" step="0.5" tal:attributes="value python: '{:.1f}'.format(room.current_setpoint)" min="5" max="30">
+                    <button type="submit">Set</button>
+                </form>
+
+                <div class="heaters-list">
+                    <h4>Heaters:</h4>
+                    <ul>
+                        <li tal:repeat="heater room.heaters">
+                            <span tal:replace="heater.name">Heater Name</span> (<span tal:replace="heater.type">Type</span>): 
+                            <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span> / 
+                            <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>
+                            <span tal:condition="heater.is_on" class="badge badge-on">ON</span>
+                            <span tal:condition="not heater.is_on" class="badge badge-off">OFF</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
