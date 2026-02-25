@@ -1,0 +1,76 @@
+{
+  "rooms": [
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "heaters": [
+        {
+          "id": "adax-1",
+          "name": "Kitchen Window",
+          "type": "Adax",
+          "current_temp": 21.5,
+          "setpoint": 22.0
+        }
+      ]
+    },
+    {
+      "id": "living",
+      "name": "Living Room",
+      "heaters": [
+        {
+          "id": "mill-1",
+          "name": "Main Wall",
+          "type": "Mill",
+          "current_temp": 20.8,
+          "setpoint": 21.0
+        },
+        {
+          "id": "adax-2",
+          "name": "Side Wall",
+          "type": "Adax",
+          "current_temp": 20.5,
+          "setpoint": 21.0
+        }
+      ]
+    },
+    {
+      "id": "bath",
+      "name": "Bathroom",
+      "heaters": [
+        {
+          "id": "adax-3",
+          "name": "Floor Heater",
+          "type": "Adax",
+          "current_temp": 23.2,
+          "setpoint": 24.0
+        }
+      ]
+    },
+    {
+      "id": "bedroom1",
+      "name": "Bedroom 1",
+      "heaters": [
+        {
+          "id": "mill-2",
+          "name": "Bedroom 1 Heater",
+          "type": "Mill",
+          "current_temp": 18.5,
+          "setpoint": 19.0
+        }
+      ]
+    },
+    {
+      "id": "bedroom2",
+      "name": "Bedroom 2",
+      "heaters": [
+        {
+          "id": "mill-3",
+          "name": "Bedroom 2 Heater",
+          "type": "Adax",
+          "current_temp": 17.5,
+          "setpoint": 18.0
+        }
+      ]
+    }
+  ]
+}

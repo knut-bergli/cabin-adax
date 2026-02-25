@@ -1,24 +1,35 @@
+import json
+import os
 from app.models import Room, Heater
 
-# Mock data
-rooms = [
-    Room(id="kitchen", name="Kitchen", heaters=[
-        Heater(id="adax-1", name="Kitchen Window", type="Adax", current_temp=21.5, setpoint=22.0),
-    ]),
-    Room(id="living", name="Living Room", heaters=[
-        Heater(id="mill-1", name="Main Wall", type="Mill", current_temp=20.8, setpoint=21.0),
-        Heater(id="adax-2", name="Side Wall", type="Adax", current_temp=20.5, setpoint=21.0),
-    ]),
-    Room(id="bath", name="Bathroom", heaters=[
-        Heater(id="adax-3", name="Floor Heater", type="Adax", current_temp=23.2, setpoint=24.0),
-    ]),
-    Room(id="bedroom1", name="Bedroom 1", heaters=[
-        Heater(id="mill-2", name="Bedroom 1 Heater", type="Mill", current_temp=18.5, setpoint=19.0),
-    ]),
-    Room(id="bedroom2", name="Bedroom 2", heaters=[
-        Heater(id="mill-3", name="Bedroom 2 Heater", type="Adax", current_temp=17.5, setpoint=18.0),
-    ]),
-]
+
+# Load rooms from JSON file
+def _load_rooms_from_json():
+    json_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'rooms.json')
+    with open(json_path, 'r') as f:
+        data = json.load(f)
+
+    rooms_list = []
+    for room_data in data['rooms']:
+        heaters = [
+            Heater(
+                id=h['id'],
+                name=h['name'],
+                type=h['type'],
+                current_temp=h['current_temp'],
+                setpoint=h['setpoint']
+            )
+            for h in room_data['heaters']
+        ]
+        rooms_list.append(Room(
+            id=room_data['id'],
+            name=room_data['name'],
+            heaters=heaters
+        ))
+    return rooms_list
+
+
+rooms = _load_rooms_from_json()
 
 
 def get_rooms():
