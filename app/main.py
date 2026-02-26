@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -5,15 +6,23 @@ import fastapi_chameleon
 import uvicorn
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
-
+from app.config.load_environment import get_settings, resolve_path
+from app.models import db_session
 from app.routers import home
+
+logger = logging.getLogger(get_settings().LOGGER_NAME)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     """
-
+    # :TODO: cabin_adax_storage/db into .env
+    db_file = resolve_path('cabin_adax_storage/db') / get_settings().DB_NAME
+    if not db_file:
+        raise FileNotFoundError("You must specify a database file.")
+    await db_session.global_init_database(str(db_file))
+    logger.debug(f"Cabin-hub started and database initialized at {db_file}")
     yield
     # Possible clean up code here
 

@@ -89,7 +89,7 @@ async def get_async_session() -> AsyncGenerator[AsyncSession | Any, Any]:
 
     """
     if _async_session_maker is None:
-        from config.load_environment import get_settings, resolve_path
+        from app.config.load_environment import get_settings, resolve_path
         db_file = resolve_path('cabin_hub_storage/db') / get_settings().DB_NAME
         await global_init_database(str(db_file))
 
