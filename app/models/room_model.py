@@ -1,12 +1,12 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from sqlmodel import SQLModel, Field, Relationship
 from app.models.heater_model import Heater
 
 
-class Room(BaseModel):
-    id: str
+class Room(SQLModel, table=True):
+    id: str = Field(primary_key=True)
     name: str
-    heaters: List[Heater]
+    heaters: List[Heater] = Relationship(back_populates="room")
 
     @property
     def average_temp(self) -> float:
@@ -20,7 +20,6 @@ class Room(BaseModel):
         if not self.heaters:
             return 20.0
         return self.heaters[0].setpoint
-
 
     def __repr__(self):
         return f"Room(id={self.id}, name='{self.name}', heaters={len(self.heaters)}, average_temp={self.average_temp:.1f}°C)"

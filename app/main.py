@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from app.config.load_environment import get_settings, resolve_path
 from app.models import db_session
-from app.routers import home
+from app.routers import home, admin
 
 logger = logging.getLogger(get_settings().LOGGER_NAME)
 
@@ -55,6 +55,7 @@ def configure_routes():
     app.mount('/static', StaticFiles(directory=str(static_folder)), name='static')
 
     app.include_router(home.router)
+    app.include_router(admin.router)
 
 
 def main():

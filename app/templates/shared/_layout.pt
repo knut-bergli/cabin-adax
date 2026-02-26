@@ -6,12 +6,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabin Temperature Control</title>
-    <link rel="stylesheet" href="static/css/site.css">
+    <link rel="stylesheet" href="/static/css/site.css">
 </head>
 <body>
 
 <header>
     <h1>Cabin Heating Dashboard</h1>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin/rooms">Manage Rooms</a></li>
+            <li><a href="/admin/heaters">Manage Heaters</a></li>
+        </ul>
+    </nav>
 </header>
 
 <main class="container" metal:define-slot="content">
