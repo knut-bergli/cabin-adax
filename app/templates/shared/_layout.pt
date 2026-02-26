@@ -2,12 +2,25 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal">
+<!--?<head>-->
+<!--?    <meta charset="UTF-8">-->
+<!--?    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--?    <title>Cabin Temperature Control</title>-->
+<!--?    <link rel="stylesheet" href="/static/css/site.css">-->
+<!--?</head>-->
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Cabin Temperature Control</title>
-    <link rel="stylesheet" href="/static/css/site.css">
+
+    <!-- Master Styles -->
+    <link rel="stylesheet" href="/static/css/site.css"/>
+    <link rel="stylesheet" href="/static/css/header-blue.css"/>
+
+    <div metal:define-slot="additional-css"  tal:omit-tag="True"></div>
 </head>
+
 <body>
 
 <header>

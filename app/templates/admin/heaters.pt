@@ -1,0 +1,44 @@
+<div metal:use-macro="load: ../shared/_layout.pt"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal">
+    <main metal:fill-slot="content" class="container">
+        <h1>Heaters Management</h1>
+        <div class="actions">
+            <a href="/admin/heaters/add" class="btn btn-primary">Add Heater</a>
+            <a href="/admin/rooms" class="btn btn-secondary">Manage Rooms</a>
+        </div>
+        
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Room</th>
+                    <th>Temp / Setpoint</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr tal:repeat="heater heaters">
+                    <td tal:content="heater.id">ID</td>
+                    <td tal:content="heater.name">Name</td>
+                    <td tal:content="heater.type">Type</td>
+                    <td tal:content="python: heater.room.name if heater.room else 'None'">Room</td>
+                    <td><span tal:replace="heater.current_temp">0</span> / <span tal:replace="heater.setpoint">0</span></td>
+                    <td>
+                        <span tal:condition="heater.is_on" class="badge badge-on">ON</span>
+                        <span tal:condition="not heater.is_on" class="badge badge-off">OFF</span>
+                    </td>
+                    <td>
+                        <a tal:attributes="href python: '/admin/heaters/edit/{}'.format(heater.id)" class="btn btn-sm">Edit</a>
+                        <form tal:attributes="action python: '/admin/heaters/delete/{}'.format(heater.id)" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>

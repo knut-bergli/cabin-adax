@@ -3,11 +3,14 @@ from fastapi_chameleon import template
 from app.services import data_service
 from app.models.db_session import db_dependency
 
-router = fastapi.APIRouter()
+router = fastapi.APIRouter(
+    prefix="/heaters",
+    tags=["heaters"]
+)
 
 
 @router.get('/')
-@template(template_file='home/index.pt')
+@template(template_file='heaters_dashboard/heaters_dashboard.pt')
 async def index(db: db_dependency):
     rooms = await data_service.get_rooms(db)
     return {

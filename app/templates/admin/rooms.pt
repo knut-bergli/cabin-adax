@@ -1,0 +1,35 @@
+<div metal:use-macro="load: ../shared/_layout.pt"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal">
+    <main metal:fill-slot="content" class="container">
+        <h1>Rooms Management</h1>
+        <div class="actions">
+            <a href="/admin/rooms/add" class="btn btn-primary">Add Room</a>
+            <a href="/admin/heaters" class="btn btn-secondary">Manage Heaters</a>
+        </div>
+        
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Heaters</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr tal:repeat="room rooms">
+                    <td tal:content="room.id">ID</td>
+                    <td tal:content="room.name">Name</td>
+                    <td tal:content="python: len(room.heaters)">0</td>
+                    <td>
+                        <a tal:attributes="href python: '/admin/rooms/edit/{}'.format(room.id)" class="btn btn-sm">Edit</a>
+                        <form tal:attributes="action python: '/admin/rooms/delete/{}'.format(room.id)" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
