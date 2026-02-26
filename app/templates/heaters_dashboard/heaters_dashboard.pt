@@ -10,7 +10,7 @@
                     <p class="current-setpoint">Setpoint: <span tal:replace="python: '{:.1f}'.format(room.current_setpoint)">&deg;C</span></p>
                 </div>
                 
-                <form tal:attributes="action python: '/set_temp/{}'.format(room.id)" method="post" class="setpoint-form">
+                <form tal:attributes="action python: '/heaters/set_temp/{}'.format(room.id)" method="post" class="setpoint-form">
                     <input type="number" name="setpoint" step="0.5" tal:attributes="value python: '{:.1f}'.format(room.current_setpoint)" min="5" max="30">
                     <button type="submit">Set</button>
                 </form>

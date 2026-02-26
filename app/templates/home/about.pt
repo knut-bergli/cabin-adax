@@ -1,0 +1,12 @@
+<div metal:use-macro="load: ../shared/_layout.pt">
+    <div metal:fill-slot="content" tal:omit-tag="True">
+        <div class="booking-form">
+            <div class="text-center">
+                <p tal:condition="is_logged_in"><h1>Welcome to Cabin hub ${ user }</h1></p>
+                <p tal:condition="not is_logged_in"><h1>Cabin hub - You need to login</h1></p>
+            </div>
+            <img class="img-fluid" src="${about_image_path}" loading="auto">
+
+        </div>
+    </div>
+</div>

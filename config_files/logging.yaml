@@ -1,0 +1,79 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+    simple:
+        format: "[%(asctime)s][%(levelname)s] %(name)s: %(message)s (%(filename)s:%(lineno)d)"
+#    json:
+#        '()': logging_json.JSONFormatter
+#        fields:
+#            timestamp: asctime
+#            level: levelname
+#            name: name
+#            message: message
+#            filename: filename
+#            lineno: lineno
+handlers:
+    console:
+        formatter: simple
+        class: logging.StreamHandler
+        stream: ext://sys.stdout
+        level: DEBUG
+    file:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: simple
+        filename: ./cabin_adax_storage/log/app.log
+        mode: a
+        maxBytes: 5000000 # 5 MB
+        backupCount: 3
+        encoding: utf-8
+
+root:
+    level: DEBUG
+    handlers: [file, console]
+
+loggers:
+    development:
+        level: DEBUG
+
+    staging:
+        level: INFO
+
+    production:
+        level: WARNING
+
+    aiosqlite:
+        level: ERROR
+
+    # silence SQLAlchemy, chameleon and multipart logging
+    sqlalchemy:
+        level: ERROR
+        propagate: False
+    sqlalchemy.engine:
+        level: ERROR
+        propagate: False
+    sqlalchemy.engine.Engine:
+        level: ERROR
+        propagate: False
+    sqlalchemy.pool:
+        level: ERROR
+        propagate: False
+    sqlalchemy.orm:
+        level: ERROR
+        propagate: False
+
+    chameleon.template:
+        level: ERROR
+        propagate: False
+
+    python_multipart.multipart:
+        level: ERROR
+        propagate: False
+
+    uvicorn:
+        level: WARNING
+        propagate: True
+
+    uvicorn.access:
+        level: WARNING
+        propagate: True

@@ -14,11 +14,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Cabin Temperature Control</title>
 
+    <link id="favicon" rel="icon" type="image/x-icon" href="/favicon.ico">
+
     <!-- Master Styles -->
     <link rel="stylesheet" href="/static/css/site.css"/>
     <link rel="stylesheet" href="/static/css/header-blue.css"/>
 
-    <div metal:define-slot="additional-css"  tal:omit-tag="True"></div>
+<!--?    <div metal:define-slot="additional-css"  tal:omit-tag="True"></div>-->
 </head>
 
 <body>
