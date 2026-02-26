@@ -1,6 +1,8 @@
 import json
 import os
-from app.models import Room, Heater
+
+from app.models.room_model import Room
+from app.models.heater_model import Heater
 
 
 # Load rooms from JSON file
