@@ -1,0 +1,1 @@
+The easiest is to create .env file based on the env_template.txt and place the .env file here.

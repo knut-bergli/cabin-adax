@@ -4,12 +4,15 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi>=0.131.0",
+    "fastapi>=0.133.1",
     "fastapi_chameleon>=0.1.17",
     "uvicorn>=0.41.0",
+    "python-dotenv==1.2.1",
     "python-multipart>=0.0.22",
-
-
+    "SQLAlchemy==2.0.47",
+    "sqlmodel==0.0.37",
+    "pydantic-settings==2.13.1",
+    "pyyaml (>=6.0.3,<7.0.0)",
 
 
 ]

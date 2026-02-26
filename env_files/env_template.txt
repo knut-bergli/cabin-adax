@@ -1,0 +1,19 @@
+AUTH_KEY=changeme_generated_64_hex
+AUTH_ALGORITHM=HS256
+# AUTH_ACCESS_TIMEOUT defines the token and cookie validity period in minutes
+AUTH_ACCESS_TIMEOUT=30
+# AUTH_2FA_TIMEOUT defines the session validity after successful 2FA in minutes
+AUTH_2FA_TIMEOUT=1440
+DB_NAME=cabin_adax.sqlite
+
+LOGGER_NAME=production or development
+LOGGING_FILE_NAME=/config_files/logging.yaml
+ABOUT_IMAGE_FILE_NAME=/static/img/about.jpg
+
+# Cookie/session hardening
+COOKIE_SECURE=True
+COOKIE_SAMESITE=Lax
+
+DEV_MODE=False
+TIMEZONE=Europe/Oslo
+
