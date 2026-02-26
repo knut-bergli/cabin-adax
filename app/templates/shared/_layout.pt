@@ -39,16 +39,31 @@
 <!--?        </ul>-->
 <!--?    </nav>-->
 
-<nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
+<!--?<nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">-->
+<!--?        <div class="container-fluid"><a class="navbar-brand" href="/">Cabin Heaters</a>-->
+<!--?            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span-->
+<!--?                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>-->
+<!--?            <div class="collapse navbar-collapse" id="navcol-1">-->
+
+
+<!--?            </div>-->
+<!--?        </div>-->
+<!--?</nav>-->
+
+    <!--?    <nav class="navbar navbar-expand-md bg-body">-->
+    <nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
         <div class="container-fluid"><a class="navbar-brand" href="/">Cabin Heaters</a>
-            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1"><span
                     class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
-
-
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="/heaters">Heaters</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/rooms">Manage Rooms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/heaters">Manage Heaters</a></li>
+                </ul>
             </div>
         </div>
-</nav>
+    </nav>
 
 
     <div class="container hero">
