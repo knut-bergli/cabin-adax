@@ -15,7 +15,11 @@
     <title>Cabin Temperature Control</title>
 
     <link id="favicon" rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Bootstrap CSS -->
+    <link href="/static/external/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="/static/external/css/bootstrap-icons.min.css">
     <!-- Master Styles -->
     <link rel="stylesheet" href="/static/css/site.css"/>
     <link rel="stylesheet" href="/static/css/header-blue.css"/>
@@ -25,24 +29,47 @@
 
 <body>
 
-<header>
+<header class="header-blue min-vh-100">
     <h1>Cabin Heating Dashboard</h1>
-    <nav>
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/admin/rooms">Manage Rooms</a></li>
-            <li><a href="/admin/heaters">Manage Heaters</a></li>
-        </ul>
-    </nav>
+<!--?    <nav>-->
+<!--?        <ul class="nav-links">-->
+<!--?            <li><a href="/">Home</a></li>-->
+<!--?            <li><a href="/admin/rooms">Manage Rooms</a></li>-->
+<!--?            <li><a href="/admin/heaters">Manage Heaters</a></li>-->
+<!--?        </ul>-->
+<!--?    </nav>-->
+
+<nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
+        <div class="container-fluid"><a class="navbar-brand" href="/">Cabin Heaters</a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
+                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+
+
+            </div>
+        </div>
+</nav>
+
+
+    <div class="container hero">
+        <div metal:define-slot="content" tal:omit-tag="True">No content</div>
+    </div>
+
+    <div>
+        <footer class="text-center text-muted mt-auto fixed-bottom">
+            <div class="container text-muted">
+                <ul class="list-inline">
+                    <li class="list-inline-item me-4"></li>
+                </ul>
+                <p class="mb-0">&copy; 2026 Cabin Heating Control</p>
+            </div>
+        </footer>
+
+    </div>
+
 </header>
 
-<main class="container" metal:define-slot="content">
-    Page content goes here.
-</main>
-
-<footer>
-    <p>&copy; 2026 Cabin Heating Control</p>
-</footer>
+<script src="/static/external/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
