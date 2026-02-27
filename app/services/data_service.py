@@ -15,7 +15,7 @@ async def get_rooms(db: AsyncSession) -> Sequence[Room]:
     return rooms
 
 
-async def get_room_by_id(db: AsyncSession, room_id: str) -> Room | None:
+async def get_room_by_id(db: AsyncSession, room_id: int) -> Room | None:
     stmt = select(Room).where(Room.id == room_id).options(selectinload(Room.heaters))
     result = await db.execute(stmt)
     return result.scalar_one_or_none()
@@ -28,7 +28,7 @@ async def add_room(db: AsyncSession, room: Room) -> Room:
     return room
 
 
-async def update_room(db: AsyncSession, room_id: str, name: str) -> Room | None:
+async def update_room(db: AsyncSession, room_id: int, name: str) -> Room | None:
     room = await get_room_by_id(db, room_id)
     if not room:
         return None
@@ -39,7 +39,7 @@ async def update_room(db: AsyncSession, room_id: str, name: str) -> Room | None:
     return room
 
 
-async def delete_room(db: AsyncSession, room_id: str) -> bool:
+async def delete_room(db: AsyncSession, room_id: int) -> bool:
     room = await get_room_by_id(db, room_id)
     if not room:
         return False
@@ -48,7 +48,7 @@ async def delete_room(db: AsyncSession, room_id: str) -> bool:
     return True
 
 
-async def update_room_setpoint(db: AsyncSession, room_id: str, new_setpoint: float) -> bool:
+async def update_room_setpoint(db: AsyncSession, room_id: int, new_setpoint: float) -> bool:
     # Load heaters for the specified room and update their setpoints
     stmt = (
         select(Heater)
@@ -73,7 +73,7 @@ async def get_heaters(db: AsyncSession) -> Sequence[Heater]:
     return result.scalars().all()
 
 
-async def get_heater_by_id(db: AsyncSession, heater_id: str) -> Heater | None:
+async def get_heater_by_id(db: AsyncSession, heater_id: int) -> Heater | None:
     stmt = select(Heater).where(Heater.id == heater_id).options(selectinload(Heater.room))
     result = await db.execute(stmt)
     return result.scalar_one_or_none()
@@ -86,7 +86,7 @@ async def add_heater(db: AsyncSession, heater: Heater) -> Heater:
     return heater
 
 
-async def update_heater(db: AsyncSession, heater_id: str, name: str, type: str, current_temp: float, setpoint: float, is_on: bool, room_id: str | None) -> Heater | None:
+async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, current_temp: float, setpoint: float, is_on: bool, room_id: int | None) -> Heater | None:
     heater = await get_heater_by_id(db, heater_id)
     if not heater:
         return None
@@ -102,7 +102,7 @@ async def update_heater(db: AsyncSession, heater_id: str, name: str, type: str, 
     return heater
 
 
-async def delete_heater(db: AsyncSession, heater_id: str) -> bool:
+async def delete_heater(db: AsyncSession, heater_id: int) -> bool:
     heater = await get_heater_by_id(db, heater_id)
     if not heater:
         return False

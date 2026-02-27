@@ -35,14 +35,13 @@ def migrate_data():
 
         for room_data in data['rooms']:
             room = Room(
-                id=room_data['id'],
                 name=room_data['name']
             )
             session.add(room)
+            session.flush() # Ensure room.id is generated
             
             for heater_data in room_data['heaters']:
                 heater = Heater(
-                    id=heater_data['id'],
                     name=heater_data['name'],
                     type=heater_data['type'],
                     current_temp=heater_data['current_temp'],

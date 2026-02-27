@@ -19,6 +19,6 @@ async def index(db: db_dependency):
 
 
 @router.post('/set_temp/{room_id}')
-async def set_temp(room_id: str, db: db_dependency, setpoint: float = fastapi.Form(...)):
+async def set_temp(room_id: int, db: db_dependency, setpoint: float = fastapi.Form(...)):
     await data_service.update_room_setpoint(db, room_id, setpoint)
     return fastapi.responses.RedirectResponse(url='/heaters/', status_code=303)

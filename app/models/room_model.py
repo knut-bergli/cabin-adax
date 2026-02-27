@@ -4,7 +4,7 @@ from app.models.heater_model import Heater
 
 
 class Room(SQLModel, table=True):
-    id: str = Field(primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     heaters: List[Heater] = Relationship(back_populates="room")
 

@@ -6,14 +6,14 @@ if TYPE_CHECKING:
 
 
 class Heater(SQLModel, table=True):
-    id: str = Field(primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     type: str  # 'Adax' or 'Mill'
     current_temp: float
     setpoint: float
     is_on: bool = Field(default=True)
 
-    room_id: Optional[str] = Field(default=None, foreign_key="room.id")
+    room_id: Optional[int] = Field(default=None, foreign_key="room.id")
     room: Optional["Room"] = Relationship(back_populates="heaters")
 
     def __repr__(self):
