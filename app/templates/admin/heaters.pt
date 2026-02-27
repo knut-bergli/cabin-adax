@@ -31,7 +31,6 @@
                         </thead>
                         <tbody>
                             <tr tal:repeat="heater heaters">
-                                <td tal:content="heater.id">ID</td>
                                 <td tal:content="heater.name" class="fw-bold">Name</td>
                                 <td tal:content="heater.type">Type</td>
                                 <td>
