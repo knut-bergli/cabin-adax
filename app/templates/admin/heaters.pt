@@ -1,44 +1,71 @@
 <div metal:use-macro="load: ../shared/_layout.pt"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      xmlns:metal="http://xml.zope.org/namespaces/metal">
-    <main metal:fill-slot="content" class="container">
-        <h1>Heaters Management</h1>
-        <div class="actions">
-            <a href="/admin/heaters/add" class="btn btn-primary">Add Heater</a>
-            <a href="/admin/rooms" class="btn btn-secondary">Manage Rooms</a>
+    <main metal:fill-slot="content" class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 text-white">
+            <h1 class="mb-0">Heaters Management</h1>
+            <div class="btn-group" role="group">
+                <a href="/admin/heaters/add" class="btn btn-success">
+                    <i class="bi bi-plus-circle me-1"></i>Add Heater
+                </a>
+                <a href="/admin/rooms" class="btn btn-light">
+                    <i class="bi bi-door-open me-1"></i>Manage Rooms
+                </a>
+            </div>
         </div>
         
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Room</th>
-                    <th>Temp / Setpoint</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr tal:repeat="heater heaters">
-                    <td tal:content="heater.id">ID</td>
-                    <td tal:content="heater.name">Name</td>
-                    <td tal:content="heater.type">Type</td>
-                    <td tal:content="python: heater.room.name if heater.room else 'None'">Room</td>
-                    <td><span tal:replace="heater.current_temp">0</span> / <span tal:replace="heater.setpoint">0</span></td>
-                    <td>
-                        <span tal:condition="heater.is_on" class="badge badge-on">ON</span>
-                        <span tal:condition="not heater.is_on" class="badge badge-off">OFF</span>
-                    </td>
-                    <td>
-                        <a tal:attributes="href python: '/admin/heaters/edit/{}'.format(heater.id)" class="btn btn-sm">Edit</a>
-                        <form tal:attributes="action python: '/admin/heaters/delete/{}'.format(heater.id)" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?')">
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Room</th>
+                                <th>Temp / Setpoint</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr tal:repeat="heater heaters">
+                                <td tal:content="heater.id">ID</td>
+                                <td tal:content="heater.name" class="fw-bold">Name</td>
+                                <td tal:content="heater.type">Type</td>
+                                <td>
+                                    <span class="badge bg-info text-dark" tal:content="python: heater.room.name if heater.room else 'None'">Room</span>
+                                </td>
+                                <td>
+                                    <span class="text-primary fw-bold" tal:replace="heater.current_temp">0</span>&deg;C / 
+                                    <span class="text-secondary" tal:replace="heater.setpoint">0</span>&deg;C
+                                </td>
+                                <td>
+                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
+                                        <i class="bi bi-power me-1"></i>ON
+                                    </span>
+                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">
+                                        <i class="bi bi-power me-1"></i>OFF
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a tal:attributes="href python: '/admin/heaters/edit/{}'.format(heater.id)" 
+                                       class="btn btn-sm btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form tal:attributes="action python: '/admin/heaters/delete/{}'.format(heater.id)" 
+                                          method="post" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
