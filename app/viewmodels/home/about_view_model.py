@@ -17,4 +17,4 @@ class AboutViewModel(ViewModelBase):
 
     async def load(self):
         self.about_image_path = get_settings().ABOUT_IMAGE_FILE_NAME
-        self.user = 'HeatUser'
+        self.user = 'Knut'

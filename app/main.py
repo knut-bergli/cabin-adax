@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     if not db_file:
         raise FileNotFoundError("You must specify a database file.")
     await db_session.global_init_database(str(db_file))
-    logger.debug(f"Cabin-hub started and database initialized at {db_file}")
+    logger.debug(f"Cabin-heater started and database initialized at {db_file}")
     yield
     # Possible clean up code here
 

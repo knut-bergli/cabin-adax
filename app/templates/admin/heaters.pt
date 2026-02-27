@@ -20,7 +20,6 @@
                     <table class="table table-striped table-hover mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Room</th>
@@ -31,7 +30,7 @@
                         </thead>
                         <tbody>
                             <tr tal:repeat="heater heaters">
-                                <td tal:content="heater.name" class="fw-bold">Name</td>
+                                <td tal:content="heater.name" class="fw-bod">Name</td>
                                 <td tal:content="heater.type">Type</td>
                                 <td>
                                     <span class="badge bg-info text-dark" tal:content="python: heater.room.name if heater.room else 'None'">Room</span>
