@@ -1,3 +1,4 @@
+from app.models import Heaterapp.models import Heater
 <div metal:use-macro="load: ../shared/_layout.pt"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      xmlns:metal="http://xml.zope.org/namespaces/metal">
@@ -23,7 +24,8 @@
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Room</th>
-                                <th>Temp / Setpoint</th>
+                                <th>IP Address</th>
+                                <th>Token</th>
                                 <th>Status</th>
                                 <th class="text-end">Actions</th>
                             </tr>
@@ -36,9 +38,10 @@
                                     <span class="badge bg-info text-dark" tal:content="python: heater.room.name if heater.room else 'None'">Room</span>
                                 </td>
                                 <td>
-                                    <span class="text-primary fw-bold" tal:replace="heater.current_temp">0</span>&deg;C / 
-                                    <span class="text-secondary" tal:replace="heater.setpoint">0</span>&deg;C
+                                    <span class="text-primary fw-bold" tal:replace="heater.ip_address"></span>
                                 </td>
+                                <td>
+                                    <span class="text-secondary" tal:replace="heater.token"></span>
                                 <td>
                                     <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
                                         <i class="bi bi-power me-1"></i>ON

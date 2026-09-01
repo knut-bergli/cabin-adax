@@ -86,14 +86,14 @@ async def add_heater(db: AsyncSession, heater: Heater) -> Heater:
     return heater
 
 
-async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, current_temp: float, setpoint: float, is_on: bool, room_id: int | None) -> Heater | None:
+async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, ip_address: str, token: str, is_on: bool, room_id: int | None) -> Heater | None:
     heater = await get_heater_by_id(db, heater_id)
     if not heater:
         return None
     heater.name = name
     heater.type = type
-    heater.current_temp = current_temp
-    heater.setpoint = setpoint
+    heater.ip_address = ip_address
+    heater.token = token
     heater.is_on = is_on
     heater.room_id = room_id
     db.add(heater)

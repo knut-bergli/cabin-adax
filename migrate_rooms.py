@@ -6,6 +6,7 @@ from app.models.room_model import Room
 from app.models.heater_model import Heater
 from app.config.load_environment import get_settings, resolve_path
 
+
 def migrate_data():
     # Setup paths
     json_path = resolve_path('app/data/rooms.json')
@@ -44,8 +45,8 @@ def migrate_data():
                 heater = Heater(
                     name=heater_data['name'],
                     type=heater_data['type'],
-                    current_temp=heater_data['current_temp'],
-                    setpoint=heater_data['setpoint'],
+                    ip_address=heater_data['ip_address'],
+                    token=heater_data['token'],
                     room_id=room.id
                 )
                 session.add(heater)

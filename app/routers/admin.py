@@ -50,23 +50,25 @@ async def heaters_list(db: db_dependency):
     heaters = await data_service.get_heaters(db)
     return {'heaters': heaters}
 
+
 @router.get('/heaters/add')
 @template(template_file='admin/edit_heater.pt')
 async def add_heater_get(db: db_dependency):
     rooms = await data_service.get_rooms(db)
     return {'heater': None, 'rooms': rooms}
 
+
 @router.post('/heaters/add')
 async def add_heater_post(
     name: str = Form(...), 
     type: str = Form(...),
-    current_temp: float = Form(0.0),
-    setpoint: float = Form(20.0),
+    ip_address: str = Form(...),
+    token: str = Form(...),
     is_on: bool = Form(True),
     room_id: int = Form(None),
     db: db_dependency = None
 ):
-    heater = Heater(name=name, type=type, current_temp=current_temp, setpoint=setpoint, is_on=is_on, room_id=room_id)
+    heater = Heater(name=name, type=type, ip_address=ip_address, token=token, is_on=is_on, room_id=room_id)
     await data_service.add_heater(db, heater)
     return RedirectResponse(url='/admin/heaters', status_code=303)
 
@@ -84,13 +86,13 @@ async def edit_heater_post(
     heater_id: int,
     name: str = Form(...),
     type: str = Form(...),
-    current_temp: float = Form(...),
-    setpoint: float = Form(...),
+    ip_address: str = Form(...),
+    token: str = Form(...),
     is_on: bool = Form(False),
     room_id: int = Form(None),
     db: db_dependency = None
 ):
-    await data_service.update_heater(db, heater_id, name, type, current_temp, setpoint, is_on, room_id)
+    await data_service.update_heater(db, heater_id, name, type, ip_address, token, is_on, room_id)
     return RedirectResponse(url='/admin/heaters', status_code=303)
 
 @router.post('/heaters/delete/{heater_id}')

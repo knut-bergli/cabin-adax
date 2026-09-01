@@ -9,16 +9,16 @@ class Heater(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     type: str  # 'Adax' or 'Mill'
-    current_temp: float
-    setpoint: float
+    ip_address: str
+    token: str
     is_on: bool = Field(default=True)
 
     room_id: Optional[int] = Field(default=None, foreign_key="room.id")
     room: Optional["Room"] = Relationship(back_populates="heaters")
 
     def __repr__(self):
-        return f"Heater(id={self.id}, name='{self.name}', type='{self.type}', current_temp={self.current_temp}, setpoint={self.setpoint}, is_on={self.is_on})"
+        return f"Heater(id={self.id}, name='{self.name}', type='{self.type}', ip_address= {self.ip_address}, token={self.token}, is_on={self.is_on})"
 
     def __str__(self):
-        return f"Heater: {self.name} ({self.type}) - Temp: {self.current_temp}°C, Setpoint: {self.setpoint}°C, {'On' if self.is_on else 'Off'}"
+        return f"Heater: {self.name} ({self.type}), , ip_address= {self.ip_address}, token={self.token}, {'On' if self.is_on else 'Off'}"
 
