@@ -6,12 +6,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.room_model import Room
 from app.models.heater_model import Heater
+from app.services import heater_service
 
 
-async def get_rooms(db: AsyncSession) -> Sequence[Room]:
+async def get_rooms(db: AsyncSession, refresh_heaters: bool = False) -> Sequence[Room]:
     stmt = select(Room).options(selectinload(Room.heaters))
     result = await db.execute(stmt)
     rooms = result.scalars().unique().all()
+    if refresh_heaters:
+        await heater_service.refresh_rooms_heaters(rooms)
     return rooms
 
 
@@ -62,9 +65,7 @@ async def update_room_setpoint(db: AsyncSession, room_id: int, new_setpoint: flo
 
     for h in heaters:
         # Change setpoint for each heater in the room
-        # :TODO:
-        # Call heater procedure to update setpoint
-        pass
+        await heater_service.set_heater_setpoint(h, new_setpoint)
 
     await db.commit()
     return True

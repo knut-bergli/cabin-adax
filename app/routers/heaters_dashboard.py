@@ -12,7 +12,7 @@ router = fastapi.APIRouter(
 @router.get('/')
 @template(template_file='heaters_dashboard/heaters_dashboard.pt')
 async def index(db: db_dependency):
-    rooms = await data_service.get_rooms(db)
+    rooms = await data_service.get_rooms(db, refresh_heaters=True)
     return {
         'rooms': rooms
     }

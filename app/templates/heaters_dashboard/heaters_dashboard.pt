@@ -11,54 +11,46 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
-<!--?                            <div>-->
-<!--?                                <div class="text-muted small">Average</div>-->
-<!--?                                <div class="fs-5 text-primary"><span tal:replace="python: '{:.1f}'.format(room.average_temp)">&deg;C</span>&nbsp;&deg;C</div>-->
-<!--?                            </div>-->
-<!--?                            <div class="text-end">-->
-<!--?                                <div class="text-muted small">Setpoint</div>-->
-<!--?                                <div class="fs-5"><span tal:replace="python: '{:.1f}'.format(room.current_setpoint)">&deg;C</span>&nbsp;&deg;C</div>-->
-<!--?                            </div>-->
-
                             <div>
                                 <div class="text-muted small">Average</div>
+                                <div class="fs-5 text-primary"><span tal:replace="python: '{:.1f}'.format(room.average_temp)">&deg;C</span>&nbsp;&deg;C</div>
                             </div>
-                            <div>
+                            <div class="text-end">
                                 <div class="text-muted small">Setpoint</div>
+                                <div class="fs-5"><span tal:replace="python: '{:.1f}'.format(room.current_setpoint)">&deg;C</span>&nbsp;&deg;C</div>
                             </div>
                         </div>
 
-
-
-
-<!--?                        <form tal:attributes="action python: '/heaters/set_temp/{}'.format(room.id)" method="post" class="mb-3">-->
-<!--?                            <div class="input-group">-->
-<!--?                                <input type="number" name="setpoint" step="0.5" class="form-control" min="5" max="30"-->
-<!--?                                       tal:attributes="value python: '{:.1f}'.format(room.current_setpoint)" aria-label="Setpoint">-->
-<!--?                                <button type="submit" class="btn btn-primary">-->
-<!--?                                    <i class="bi bi-thermometer-half me-1"></i>Set-->
-<!--?                                </button>-->
-<!--?                            </div>-->
-<!--?                        </form>-->
+                        <form tal:attributes="action python: '/heaters/set_temp/{}'.format(room.id)" method="post" class="mb-3">
+                            <div class="input-group">
+                                <input type="number" name="setpoint" step="0.5" class="form-control" min="5" max="30"
+                                       tal:attributes="value python: '{:.1f}'.format(room.current_setpoint)" aria-label="Setpoint">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-thermometer-half me-1"></i>Set
+                                </button>
+                            </div>
+                        </form>
 
                         <h6 class="text-muted">Heaters</h6>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 tal:repeat="heater room.heaters">
                                 <div>
-                                    <span class="fw-semibold" tal:replace="heater.name">Heater Name</span>
-<!--?                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>-->
-<!--?                                    <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>-->
-<!--?                                    / <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>-->
+                                    <span class="fw-semibold" tal:content="heater.name">Heater Name</span>
+                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>
+                                    <span class="ms-1">
+                                        <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>&deg;C
+                                        / <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>&deg;C
+                                    </span>
                                 </div>
-<!--?                                <div>-->
-<!--?                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">-->
-<!--?                                        <i class="bi bi-power me-1"></i>ON-->
-<!--?                                    </span>-->
-<!--?                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">-->
-<!--?                                        <i class="bi bi-power me-1"></i>OFF-->
-<!--?                                    </span>-->
-<!--?                                </div>-->
+                                <div>
+                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
+                                        <i class="bi bi-power me-1"></i>ON
+                                    </span>
+                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">
+                                        <i class="bi bi-power me-1"></i>OFF
+                                    </span>
+                                </div>
                             </li>
                         </ul>
                     </div>
