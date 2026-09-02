@@ -23,7 +23,6 @@
                                     <label for="type" class="form-label">Type</label>
                                     <select id="type" name="type" class="form-select" required>
                                         <option value="Adax" tal:attributes="selected python: heater.type == 'Adax' if heater else False">Adax</option>
-                                        <option value="Mill" tal:attributes="selected python: heater.type == 'Mill' if heater else False">Mill</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -41,15 +40,8 @@
                                     <input type="char" id="ip_address" name="ip_address" class="form-control" tal:attributes="value heater.ip_address if heater else None" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="token" class="form-label">Setpoint (&deg;C)</label>
+                                    <label for="token" class="form-label">Token</label>
                                     <input type="token" id="token" name="token" class="form-control" tal:attributes="value heater.token if heater else None" required>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <div class="form-check form-switch">
-                                    <input type="checkbox" id="is_on" name="is_on" value="True" class="form-check-input" tal:attributes="checked python: heater.is_on if heater else True">
-                                    <label for="is_on" class="form-check-label">Heater Power Status (ON/OFF)</label>
                                 </div>
                             </div>
 

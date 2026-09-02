@@ -4,7 +4,7 @@ from app.models import Heaterapp.models import Heater
      xmlns:metal="http://xml.zope.org/namespaces/metal">
     <main metal:fill-slot="content" class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4 text-white">
-            <h1 class="mb-0">Heaters Management</h1>
+            <h1 class="mb-0">Heaters Configuration</h1>
             <div class="btn-group" role="group">
                 <a href="/admin/heaters/add" class="btn btn-success">
                     <i class="bi bi-plus-circle me-1"></i>Add Heater
@@ -26,7 +26,6 @@ from app.models import Heaterapp.models import Heater
                                 <th>Room</th>
                                 <th>IP Address</th>
                                 <th>Token</th>
-                                <th>Status</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
@@ -42,14 +41,6 @@ from app.models import Heaterapp.models import Heater
                                 </td>
                                 <td>
                                     <span class="text-secondary" tal:replace="heater.token"></span>
-                                <td>
-                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
-                                        <i class="bi bi-power me-1"></i>ON
-                                    </span>
-                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">
-                                        <i class="bi bi-power me-1"></i>OFF
-                                    </span>
-                                </td>
                                 <td class="text-end">
                                     <a tal:attributes="href python: '/admin/heaters/edit/{}'.format(heater.id)" 
                                        class="btn btn-sm btn-outline-primary" title="Edit">

@@ -64,11 +64,10 @@ async def add_heater_post(
     type: str = Form(...),
     ip_address: str = Form(...),
     token: str = Form(...),
-    is_on: bool = Form(True),
     room_id: int = Form(None),
     db: db_dependency = None
 ):
-    heater = Heater(name=name, type=type, ip_address=ip_address, token=token, is_on=is_on, room_id=room_id)
+    heater = Heater(name=name, type=type, ip_address=ip_address, token=token, room_id=room_id)
     await data_service.add_heater(db, heater)
     return RedirectResponse(url='/admin/heaters', status_code=303)
 
@@ -88,11 +87,10 @@ async def edit_heater_post(
     type: str = Form(...),
     ip_address: str = Form(...),
     token: str = Form(...),
-    is_on: bool = Form(False),
     room_id: int = Form(None),
     db: db_dependency = None
 ):
-    await data_service.update_heater(db, heater_id, name, type, ip_address, token, is_on, room_id)
+    await data_service.update_heater(db, heater_id, name, type, ip_address, token, room_id)
     return RedirectResponse(url='/admin/heaters', status_code=303)
 
 @router.post('/heaters/delete/{heater_id}')

@@ -61,7 +61,10 @@ async def update_room_setpoint(db: AsyncSession, room_id: int, new_setpoint: flo
         return False
 
     for h in heaters:
-        h.setpoint = new_setpoint
+        # Change setpoint for each heater in the room
+        # :TODO:
+        # Call heater procedure to update setpoint
+        pass
 
     await db.commit()
     return True
@@ -86,7 +89,8 @@ async def add_heater(db: AsyncSession, heater: Heater) -> Heater:
     return heater
 
 
-async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, ip_address: str, token: str, is_on: bool, room_id: int | None) -> Heater | None:
+async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, ip_address: str, token: str,
+                        room_id: int | None) -> Heater | None:
     heater = await get_heater_by_id(db, heater_id)
     if not heater:
         return None
@@ -94,7 +98,6 @@ async def update_heater(db: AsyncSession, heater_id: int, name: str, type: str, 
     heater.type = type
     heater.ip_address = ip_address
     heater.token = token
-    heater.is_on = is_on
     heater.room_id = room_id
     db.add(heater)
     await db.commit()

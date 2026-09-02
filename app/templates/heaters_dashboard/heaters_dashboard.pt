@@ -19,7 +19,17 @@
 <!--?                                <div class="text-muted small">Setpoint</div>-->
 <!--?                                <div class="fs-5"><span tal:replace="python: '{:.1f}'.format(room.current_setpoint)">&deg;C</span>&nbsp;&deg;C</div>-->
 <!--?                            </div>-->
+
+                            <div>
+                                <div class="text-muted small">Average</div>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Setpoint</div>
+                            </div>
                         </div>
+
+
+
 
 <!--?                        <form tal:attributes="action python: '/heaters/set_temp/{}'.format(room.id)" method="post" class="mb-3">-->
 <!--?                            <div class="input-group">-->
@@ -37,18 +47,18 @@
                                 tal:repeat="heater room.heaters">
                                 <div>
                                     <span class="fw-semibold" tal:replace="heater.name">Heater Name</span>
-                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>
-<!--?                                    : <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>-->
+<!--?                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>-->
+<!--?                                    <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>-->
 <!--?                                    / <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>-->
                                 </div>
-                                <div>
-                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
-                                        <i class="bi bi-power me-1"></i>ON
-                                    </span>
-                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">
-                                        <i class="bi bi-power me-1"></i>OFF
-                                    </span>
-                                </div>
+<!--?                                <div>-->
+<!--?                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">-->
+<!--?                                        <i class="bi bi-power me-1"></i>ON-->
+<!--?                                    </span>-->
+<!--?                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">-->
+<!--?                                        <i class="bi bi-power me-1"></i>OFF-->
+<!--?                                    </span>-->
+<!--?                                </div>-->
                             </li>
                         </ul>
                     </div>

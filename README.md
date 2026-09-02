@@ -56,7 +56,7 @@ Then navigate to:
 
 ### Core files and responsibilities
 - `models.py`
-  - `Heater`: `id`, `name`, `type` ("Adax" or "Mill"), `current_temp`, `setpoint`, `is_on`
+  - `Heater`: `id`, `name`, `type` ("Adax" or "Mill"), `current_temp`, `setpoint`
   - `Room`: `id`, `name`, `heaters`
     - Convenience properties for `average_temp` and `current_setpoint` (assuming uniform setpoint within a room for now)
 
