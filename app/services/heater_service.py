@@ -17,24 +17,37 @@ class AdaxLocalClient:
     Adax Wi-Fi heaters on the local network can be communicated with directly
     using their IP address and authentication token.
     """
+    DEFAULT_TIMEOUT = 5
+    CONNECT_TIMEOUT = 3
 
     @staticmethod
-    async def get_temperature(ip_address: str, token: str) -> Optional[float]:
+    def _create_session_timeout(timeout_sec: int = DEFAULT_TIMEOUT) -> aiohttp.ClientTimeout:
+        return aiohttp.ClientTimeout(
+            total=float(timeout_sec),
+            connect=float(min(AdaxLocalClient.CONNECT_TIMEOUT, timeout_sec)),
+            sock_connect=float(min(AdaxLocalClient.CONNECT_TIMEOUT, timeout_sec)),
+            sock_read=float(timeout_sec),
+        )
+
+    @staticmethod
+    async def get_temperature(ip_address: str, token: str, timeout: int = DEFAULT_TIMEOUT) -> Optional[float]:
         """
         Read the actual/ambient temperature from the Adax heater via local communication.
 
         Args:
             ip_address: IP address of the Adax heater on the local network.
             token: Authentication token / key for the heater.
+            timeout: Timeout in seconds for the network call.
 
         Returns:
             Optional[float]: The measured ambient temperature in degrees Celsius, or None if unavailable.
         """
         logger.debug(f"[AdaxLocalClient] Reading temperature from heater at {ip_address}")
         connector = aiohttp.TCPConnector(ssl=False)
+        client_timeout = AdaxLocalClient._create_session_timeout(timeout)
         try:
-            async with aiohttp.ClientSession(connector=connector) as session:
-                heater = Adax(ip_address, token, session)
+            async with aiohttp.ClientSession(connector=connector, timeout=client_timeout) as session:
+                heater = Adax(ip_address, token, session, timeout=timeout)
                 status = await heater.get_status()
                 if status and status.get("current_temperature") is not None:
                     return float(status["current_temperature"])
@@ -45,22 +58,24 @@ class AdaxLocalClient:
             return None
 
     @staticmethod
-    async def get_setpoint(ip_address: str, token: str) -> Optional[float]:
+    async def get_setpoint(ip_address: str, token: str, timeout: int = DEFAULT_TIMEOUT) -> Optional[float]:
         """
         Read the current setpoint (target temperature) from the Adax heater.
 
         Args:
             ip_address: IP address of the Adax heater on the local network.
             token: Authentication token / key for the heater.
+            timeout: Timeout in seconds for the network call.
 
         Returns:
             Optional[float]: The target setpoint temperature in degrees Celsius, or None if unavailable.
         """
         logger.debug(f"[AdaxLocalClient] Reading setpoint from heater at {ip_address}")
         connector = aiohttp.TCPConnector(ssl=False)
+        client_timeout = AdaxLocalClient._create_session_timeout(timeout)
         try:
-            async with aiohttp.ClientSession(connector=connector) as session:
-                heater = Adax(ip_address, token, session)
+            async with aiohttp.ClientSession(connector=connector, timeout=client_timeout) as session:
+                heater = Adax(ip_address, token, session, timeout=timeout)
                 status = await heater.get_status()
                 if status and status.get("target_temperature") is not None:
                     return float(status["target_temperature"])
@@ -71,7 +86,7 @@ class AdaxLocalClient:
             return None
 
     @staticmethod
-    async def set_setpoint(ip_address: str, token: str, new_setpoint: float) -> bool:
+    async def set_setpoint(ip_address: str, token: str, new_setpoint: float, timeout: int = DEFAULT_TIMEOUT) -> bool:
         """
         Send a new setpoint (target temperature) to the Adax heater.
 
@@ -79,15 +94,17 @@ class AdaxLocalClient:
             ip_address: IP address of the Adax heater on the local network.
             token: Authentication token / key for the heater.
             new_setpoint: Target temperature in degrees Celsius to set on the heater.
+            timeout: Timeout in seconds for the network call.
 
         Returns:
             bool: True if the setpoint was successfully updated, False otherwise.
         """
         logger.info(f"[AdaxLocalClient] Sending new setpoint {new_setpoint}°C to heater at {ip_address}")
         connector = aiohttp.TCPConnector(ssl=False)
+        client_timeout = AdaxLocalClient._create_session_timeout(timeout)
         try:
-            async with aiohttp.ClientSession(connector=connector) as session:
-                heater = Adax(ip_address, token, session)
+            async with aiohttp.ClientSession(connector=connector, timeout=client_timeout) as session:
+                heater = Adax(ip_address, token, session, timeout=timeout)
                 status_code = await heater.set_target_temperature(new_setpoint)
                 if status_code == 200:
                     logger.info(f"[AdaxLocalClient] Successfully updated setpoint on {ip_address}")
@@ -99,22 +116,24 @@ class AdaxLocalClient:
             return False
 
     @staticmethod
-    async def get_status(ip_address: str, token: str) -> Dict[str, Any]:
+    async def get_status(ip_address: str, token: str, timeout: int = DEFAULT_TIMEOUT) -> Dict[str, Any]:
         """
         Read complete status (temperature, setpoint, power status) from the Adax heater.
 
         Args:
             ip_address: IP address of the Adax heater on the local network.
             token: Authentication token / key for the heater.
+            timeout: Timeout in seconds for the network call.
 
         Returns:
             dict: Dictionary with is_available, current_temp, setpoint, and is_on state.
         """
         logger.debug(f"[AdaxLocalClient] Reading status from heater at {ip_address}")
         connector = aiohttp.TCPConnector(ssl=False)
+        client_timeout = AdaxLocalClient._create_session_timeout(timeout)
         try:
-            async with aiohttp.ClientSession(connector=connector) as session:
-                heater = Adax(ip_address, token, session)
+            async with aiohttp.ClientSession(connector=connector, timeout=client_timeout) as session:
+                heater = Adax(ip_address, token, session, timeout=timeout)
                 status = await heater.get_status()
                 logger.info("--- Adax Heater Status ---")
                 logger.info(f"Status Data: {status}")

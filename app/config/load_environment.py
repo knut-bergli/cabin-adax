@@ -76,6 +76,7 @@ class Settings(BaseSettings):
     COOKIE_SAMESITE: str = "Lax"
     DEV_MODE: bool = False
     TIMEZONE: str = "Europe/Oslo"
+    DASHBOARD_REFRESH_INTERVAL: int = 120
 
 
 def _ensure_env_file():

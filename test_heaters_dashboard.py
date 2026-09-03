@@ -97,6 +97,24 @@ async def test_heater_service_and_models():
         assert heater_unavailable.setpoint is None
         assert heater_unavailable.is_on is False
 
+        # Test handling when heater raises connection exception (host down / network error)
+        with patch("app.services.heater_service.Adax") as mock_adax_cls:
+            mock_instance = AsyncMock()
+            mock_instance.get_status.side_effect = Exception("Cannot connect to host: Host is down")
+            mock_adax_cls.return_value = mock_instance
+
+            status = await heater_service.AdaxLocalClient.get_status("192.168.1.99", "token999")
+            assert status["is_available"] is False
+            assert status["current_temp"] is None
+            assert status["setpoint"] is None
+            assert status["is_on"] is False
+
+            await heater_service.refresh_heater_data(heater_unavailable)
+            assert heater_unavailable.is_available is False
+            assert heater_unavailable.current_temp is None
+            assert heater_unavailable.setpoint is None
+            assert heater_unavailable.is_on is False
+
     # Test room temperature averaging with one available and one unavailable heater
     heater2.current_temp = 19.5
     heater2.setpoint = 23.5
@@ -150,6 +168,11 @@ async def test_database_and_routes():
             assert "22.0" in html
             assert "/heaters/set_temp/1" in html
             assert "ON" in html
+            assert "Auto-refresh:" in html
+            assert "Next update:" in html
+            assert "Last updated:" in html
+            assert "auto-refresh-select" in html
+            assert "countdown-display" in html
 
         # Test rendering with an unavailable / offline heater
         heater2.is_available = False
@@ -157,9 +180,16 @@ async def test_database_and_routes():
         heater2.setpoint = None
         heater2.is_on = False
         import fastapi_chameleon.engine
-        rendered = fastapi_chameleon.engine.render("heaters_dashboard/heaters_dashboard.pt", rooms=[room])
+        rendered = fastapi_chameleon.engine.render(
+            "heaters_dashboard/heaters_dashboard.pt",
+            rooms=[room],
+            last_updated="12:34:56",
+            refresh_interval=120
+        )
         assert "Offline" in rendered
         assert "Unavailable" in rendered
+        assert "12:34:56" in rendered
+        assert 'data-interval="120"' in rendered
 
         # Test set_temp route endpoint
         with patch("app.services.heater_service.Adax") as mock_adax_cls:

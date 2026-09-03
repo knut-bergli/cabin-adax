@@ -2,6 +2,42 @@
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      xmlns:metal="http://xml.zope.org/namespaces/metal">
     <main metal:fill-slot="content" class="container mt-4">
+        <!-- Dashboard Header & Auto-Refresh Controls -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 text-white">
+            <div>
+                <h2 class="mb-0 fw-bold">Cabin Heaters</h2>
+                <small class="text-white-50">
+                    <i class="bi bi-clock-history me-1"></i>Last updated: 
+                    <span id="last-updated-val" tal:content="last_updated | 'Just now'">--:--:--</span>
+                </small>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="input-group input-group-sm" style="width: auto;">
+                    <span class="input-group-text bg-dark text-white border-secondary">
+                        <i class="bi bi-arrow-repeat me-1"></i>Auto-refresh:
+                    </span>
+                    <select id="auto-refresh-select" class="form-select form-select-sm bg-dark text-white border-secondary"
+                            tal:attributes="data-interval refresh_interval"
+                            aria-label="Auto-refresh interval">
+                        <option value="0">Off</option>
+                        <option value="30">30 sec</option>
+                        <option value="60">1 min</option>
+                        <option value="120" selected="selected">2 min (default)</option>
+                        <option value="300">5 min</option>
+                        <option value="600">10 min</option>
+                    </select>
+                </div>
+                <span id="refresh-countdown-badge" class="badge bg-secondary text-white py-2 px-3 d-flex align-items-center" title="Time until next auto-refresh">
+                    <i class="bi bi-hourglass-split me-1"></i>
+                    <span>Next update: <strong id="countdown-display">02:00</strong></span>
+                </span>
+                <a href="/heaters/" id="btn-manual-refresh" class="btn btn-sm btn-primary d-flex align-items-center" title="Refresh now">
+                    <i class="bi bi-arrow-clockwise me-1" id="refresh-icon"></i>
+                    <span>Refresh</span>
+                </a>
+            </div>
+        </div>
+
         <div class="row g-4">
             <div class="col-12 col-md-6 col-lg-4" tal:repeat="room rooms">
                 <div class="card shadow-sm h-100">
@@ -70,5 +106,151 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            //<![CDATA[
+            (function() {
+                var select = document.getElementById('auto-refresh-select');
+                var countdownDisplay = document.getElementById('countdown-display');
+                var countdownBadge = document.getElementById('refresh-countdown-badge');
+                var refreshBtn = document.getElementById('btn-manual-refresh');
+                var refreshIcon = document.getElementById('refresh-icon');
+
+                if (!select || !countdownDisplay) {
+                    return;
+                }
+
+                var defaultInterval = parseInt(select.getAttribute('data-interval') || '120', 10);
+                var savedInterval = localStorage.getItem('heaters_dashboard_refresh_interval');
+                var intervalSeconds = savedInterval !== null ? parseInt(savedInterval, 10) : defaultInterval;
+
+                var validIntervals = [0, 30, 60, 120, 300, 600];
+                if (validIntervals.indexOf(intervalSeconds) !== -1) {
+                    select.value = intervalSeconds.toString();
+                } else {
+                    select.value = "120";
+                    intervalSeconds = 120;
+                }
+
+                var remainingSeconds = intervalSeconds;
+                var timerId = null;
+                var isRefreshing = false;
+
+                function formatTime(secs) {
+                    var m = Math.floor(secs / 60);
+                    var s = secs % 60;
+                    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+                }
+
+                function isUserInteracting() {
+                    var active = document.activeElement;
+                    if (active && (active.tagName === 'INPUT' || active.tagName === 'SELECT' || active.tagName === 'TEXTAREA')) {
+                        if (active !== select) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                function doRefresh() {
+                    if (isRefreshing) {
+                        return;
+                    }
+                    if (isUserInteracting()) {
+                        remainingSeconds = 10;
+                        updateDisplay();
+                        return;
+                    }
+                    isRefreshing = true;
+                    if (timerId) {
+                        clearInterval(timerId);
+                        timerId = null;
+                    }
+                    if (refreshIcon) {
+                        refreshIcon.classList.add('spin-icon');
+                    }
+                    if (countdownDisplay) {
+                        countdownDisplay.textContent = 'Updating...';
+                    }
+                    if (refreshBtn) {
+                        refreshBtn.classList.add('disabled');
+                    }
+                    window.location.href = '/heaters/';
+                }
+
+                function updateDisplay() {
+                    if (isRefreshing) {
+                        return;
+                    }
+                    if (intervalSeconds === 0) {
+                        countdownDisplay.textContent = 'Off';
+                        if (countdownBadge) {
+                            countdownBadge.className = 'badge bg-dark text-muted py-2 px-3 d-flex align-items-center border border-secondary';
+                        }
+                    } else {
+                        countdownDisplay.textContent = formatTime(remainingSeconds);
+                        if (countdownBadge) {
+                            countdownBadge.className = 'badge bg-secondary text-white py-2 px-3 d-flex align-items-center';
+                        }
+                    }
+                }
+
+                function tick() {
+                    if (isRefreshing || intervalSeconds <= 0) {
+                        return;
+                    }
+                    remainingSeconds--;
+                    if (remainingSeconds <= 0) {
+                        doRefresh();
+                    } else {
+                        updateDisplay();
+                    }
+                }
+
+                function startTimer() {
+                    if (timerId) {
+                        clearInterval(timerId);
+                        timerId = null;
+                    }
+                    if (isRefreshing) {
+                        return;
+                    }
+                    remainingSeconds = intervalSeconds;
+                    updateDisplay();
+                    if (intervalSeconds > 0) {
+                        timerId = setInterval(tick, 1000);
+                    }
+                }
+
+                select.addEventListener('change', function() {
+                    intervalSeconds = parseInt(this.value, 10);
+                    localStorage.setItem('heaters_dashboard_refresh_interval', intervalSeconds.toString());
+                    startTimer();
+                });
+
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', function(e) {
+                        if (isRefreshing) {
+                            e.preventDefault();
+                            return;
+                        }
+                        isRefreshing = true;
+                        if (timerId) {
+                            clearInterval(timerId);
+                            timerId = null;
+                        }
+                        if (refreshIcon) {
+                            refreshIcon.classList.add('spin-icon');
+                        }
+                        if (countdownDisplay) {
+                            countdownDisplay.textContent = 'Updating...';
+                        }
+                    });
+                }
+
+                startTimer();
+            })();
+            //]]>
+        </script>
     </main>
 </div>
