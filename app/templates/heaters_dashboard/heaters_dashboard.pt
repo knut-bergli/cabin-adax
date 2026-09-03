@@ -37,7 +37,7 @@
                                 tal:repeat="heater room.heaters">
                                 <div>
                                     <span class="fw-semibold" tal:content="heater.name">Heater Name</span>
-                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>
+<!--?                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>-->
                                     <span class="ms-1">
                                         <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>&deg;C
                                         / <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>&deg;C

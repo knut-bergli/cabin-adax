@@ -3,6 +3,9 @@ from typing import Sequence, Dict, Any
 from app.models.heater_model import Heater
 from app.models.room_model import Room
 
+import aiohttp
+from adax_local import Adax
+
 logger = logging.getLogger(__name__)
 
 
@@ -60,11 +63,32 @@ class AdaxLocalClient:
         #   async with httpx.AsyncClient() as client:
         #       response = await client.get(url, headers=headers, timeout=5.0)
         #       data = response.json()
-        #       return float(data.get("setpoint", 22.0))
+        #       return float(data.get("setpoint", 222.0))
         # =====================================================================
         logger.debug(f"[AdaxLocalClient] Reading setpoint from heater at {ip_address}")
+
+        connector = aiohttp.TCPConnector(ssl=False)
+
+        async with aiohttp.ClientSession(connector=connector) as session:
+
+            try:
+                heater = Adax(ip_address, token, session)
+                # Fetch the current state from the heater
+                status = await heater.get_status()
+
+                logger.info("--- Adax Heater Status ---")
+                logger.info(f"Status Data: {status}")
+                if status['Target Temperature'] is None:
+                    logger.info('Target Temperature:' 'N/A')
+                    return False
+                target_temp = status['target_temperature']
+
+            except Exception as e:
+                print(f"Failed to read from Adax heater: {e}")
+
+
         # Default / simulated setpoint (fallback)
-        return 22.0
+        return target_temp
 
     @staticmethod
     async def set_setpoint(ip_address: str, token: str, new_setpoint: float) -> bool:
@@ -89,6 +113,35 @@ class AdaxLocalClient:
         #       response = await client.post(url, json=payload, headers=headers, timeout=5.0)
         #       return response.status_code == 200
         # =====================================================================
+
+        connector = aiohttp.TCPConnector(ssl=False)
+
+        async with aiohttp.ClientSession(connector=connector) as session:
+
+            try:
+                heater = Adax(ip_address, token, session)
+                # Fetch the current state from the heater
+                status = await heater.get_status()
+
+                logger.info("--- Adax Heater Status ---")
+                logger.info(f"Status Data: {status}")
+                if status['current_temperature'] is None:
+                    logger.info("Current Temperature: N/A")
+                    return False
+
+                # Extract status attributes
+                current_temp = status['current_temperature']
+                target_temp = status['target_temperature']
+
+                logger.info("--- Adax Heater Status ---")
+                logger.info(f"Current Temperature: {current_temp}°C")
+                logger.info(f"Target Temperature:  {target_temp}°C")
+
+                await heater.set_target_temperature(new_setpoint)
+
+            except Exception as e:
+                print(f"Failed to read from Adax heater: {e}")
+
         logger.info(f"[AdaxLocalClient] Sending new setpoint {new_setpoint}°C to heater at {ip_address}")
         return True
 
@@ -114,9 +167,35 @@ class AdaxLocalClient:
         #       return response.json()
         # =====================================================================
         logger.debug(f"[AdaxLocalClient] Reading status from heater at {ip_address}")
+
+
+        connector = aiohttp.TCPConnector(ssl=False)
+
+        async with aiohttp.ClientSession(connector=connector) as session:
+            heater = Adax(ip_address, token, session)
+            # Fetch the current state from the heater
+            status = await heater.get_status()
+
+            logger.info("--- Adax Heater Status ---")
+            logger.info(f"Status Data: {status}")
+            if status['current_temperature'] is None:
+                logger.info("Current Temperature: N/A")
+                return {
+                    "current_temp": -99,
+                    "setpoint": -99,
+                    "is_on": False,
+                }
+            # Extract status attributes
+            current_temp = status['current_temperature']
+            target_temp = status['target_temperature']
+
+            logger.info("--- Adax Heater Status ---")
+            logger.info(f"Current Temperature: {current_temp}°C")
+            logger.info(f"Target Temperature:  {target_temp}°C")
+
         return {
-            "current_temp": 21.5,
-            "setpoint": 22.0,
+            "current_temp": current_temp,
+            "setpoint": target_temp,
             "is_on": True,
         }
 
