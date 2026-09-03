@@ -9,13 +9,37 @@ class Room(SQLModel, table=True):
     heaters: List[Heater] = Relationship(back_populates="room")
 
     @property
+    def available_heaters(self) -> List[Heater]:
+        if not self.heaters:
+            return []
+        return [h for h in self.heaters if getattr(h, "is_available", True)]
+
+    @property
+    def has_unavailable_heaters(self) -> bool:
+        if not self.heaters:
+            return False
+        return any(not getattr(h, "is_available", True) for h in self.heaters)
+
+    @property
     def average_temp(self) -> float:
         if not self.heaters:
             return 0.0
-        temps = [h.current_temp for h in self.heaters if h.current_temp is not None]
-        if not temps:
-            return 0.0
-        return sum(temps) / len(temps)
+        # Calculate average only from available heaters with valid temperatures
+        avail_temps = [
+            h.current_temp for h in self.heaters
+            if getattr(h, "is_available", True) and h.current_temp is not None and h.current_temp != -99
+        ]
+        if avail_temps:
+            return sum(avail_temps) / len(avail_temps)
+
+        # Fallback to any heater with valid temp if all are marked unavailable
+        all_temps = [
+            h.current_temp for h in self.heaters
+            if h.current_temp is not None and h.current_temp != -99
+        ]
+        if all_temps:
+            return sum(all_temps) / len(all_temps)
+        return 0.0
 
     @property
     def current_setpoint(self) -> float:
@@ -23,7 +47,10 @@ class Room(SQLModel, table=True):
         if not self.heaters:
             return 20.0
         for h in self.heaters:
-            if h.setpoint is not None:
+            if getattr(h, "is_available", True) and h.setpoint is not None and h.setpoint != -99:
+                return h.setpoint
+        for h in self.heaters:
+            if h.setpoint is not None and h.setpoint != -99:
                 return h.setpoint
         return 20.0
 

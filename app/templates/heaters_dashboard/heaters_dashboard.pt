@@ -7,7 +7,12 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0" tal:content="room.name">Room Name</h5>
-                        <span class="badge bg-info text-dark">Heaters: <span tal:replace="python: len(room.heaters)">0</span></span>
+                        <div class="d-flex align-items-center gap-1">
+                            <span tal:condition="room.has_unavailable_heaters" class="badge bg-warning text-dark" title="One or more heaters are offline">
+                                <i class="bi bi-exclamation-triangle me-1"></i>Offline
+                            </span>
+                            <span class="badge bg-info text-dark">Heaters: <span tal:replace="python: len(room.heaters)">0</span></span>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
@@ -33,21 +38,29 @@
 
                         <h6 class="text-muted">Heaters</h6>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center"
-                                tal:repeat="heater room.heaters">
+                            <li tal:repeat="heater room.heaters"
+                                tal:attributes="class python: 'list-group-item d-flex justify-content-between align-items-center bg-light text-muted opacity-75' if not heater.is_available else 'list-group-item d-flex justify-content-between align-items-center'">
                                 <div>
-                                    <span class="fw-semibold" tal:content="heater.name">Heater Name</span>
-<!--?                                    <span class="text-muted">(<span tal:replace="heater.type">Type</span>)</span>-->
-                                    <span class="ms-1">
-                                        <span tal:replace="python: '{:.1f}'.format(heater.current_temp)">&deg;C</span>&deg;C
-                                        / <span tal:replace="python: '{:.1f}'.format(heater.setpoint)">&deg;C</span>&deg;C
+                                    <span tal:attributes="class python: 'fw-semibold text-muted' if not heater.is_available else 'fw-semibold'">
+                                        <i tal:condition="not heater.is_available" class="bi bi-exclamation-circle text-danger me-1"></i>
+                                        <span tal:replace="heater.name">Heater Name</span>
+                                    </span>
+                                    <span tal:condition="heater.is_available" class="ms-1">
+                                        <span tal:replace="python: '{:.1f}'.format(heater.current_temp) if heater.current_temp is not None else '--'">&deg;C</span>&deg;C
+                                        / <span tal:replace="python: '{:.1f}'.format(heater.setpoint) if heater.setpoint is not None else '--'">&deg;C</span>&deg;C
+                                    </span>
+                                    <span tal:condition="not heater.is_available" class="ms-2 badge bg-secondary-subtle text-secondary border">
+                                        <i class="bi bi-dash-circle me-1"></i>Unavailable
                                     </span>
                                 </div>
                                 <div>
-                                    <span tal:condition="heater.is_on" class="badge rounded-pill bg-success">
+                                    <span tal:condition="not heater.is_available" class="badge rounded-pill bg-danger" title="Heater is offline or unreachable">
+                                        <i class="bi bi-wifi-off me-1"></i>Offline
+                                    </span>
+                                    <span tal:condition="heater.is_available and heater.is_on" class="badge rounded-pill bg-success">
                                         <i class="bi bi-power me-1"></i>ON
                                     </span>
-                                    <span tal:condition="not heater.is_on" class="badge rounded-pill bg-secondary">
+                                    <span tal:condition="heater.is_available and not heater.is_on" class="badge rounded-pill bg-secondary">
                                         <i class="bi bi-power me-1"></i>OFF
                                     </span>
                                 </div>
