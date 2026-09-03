@@ -12,8 +12,6 @@ logger = logging.getLogger(__name__)
 
 class AdaxLocalClient:
     """
-    Boilerplate client for local communication with Adax heaters.
-    
     Adax Wi-Fi heaters on the local network can be communicated with directly
     using their IP address and authentication token.
     """
