@@ -190,6 +190,22 @@ async def test_database_and_routes():
         assert "Unavailable" in rendered
         assert "12:34:56" in rendered
         assert 'data-interval="120"' in rendered
+        assert "Auto-refresh:" in rendered
+        assert "Next update:" in rendered
+        assert "btn-manual-refresh" in rendered
+
+        # Test rendering when refresh_interval = 0 (Auto-Refresh, Next update and Refresh should be hidden)
+        rendered_zero = fastapi_chameleon.engine.render(
+            "heaters_dashboard/heaters_dashboard.pt",
+            rooms=[room],
+            last_updated="12:34:56",
+            refresh_interval=0
+        )
+        assert "Auto-refresh:" not in rendered_zero
+        assert "Next update:" not in rendered_zero
+        assert "btn-manual-refresh" not in rendered_zero
+        assert "auto-refresh-select" not in rendered_zero
+        assert "refresh-countdown-badge" not in rendered_zero
 
         # Test set_temp route endpoint
         with patch("app.services.heater_service.Adax") as mock_adax_cls:
