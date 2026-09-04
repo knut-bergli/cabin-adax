@@ -110,21 +110,21 @@
         <script>
             //<![CDATA[
             (function() {
-                var select = document.getElementById('auto-refresh-select');
-                var countdownDisplay = document.getElementById('countdown-display');
-                var countdownBadge = document.getElementById('refresh-countdown-badge');
-                var refreshBtn = document.getElementById('btn-manual-refresh');
-                var refreshIcon = document.getElementById('refresh-icon');
+                let select = document.getElementById('auto-refresh-select');
+                let countdownDisplay = document.getElementById('countdown-display');
+                let countdownBadge = document.getElementById('refresh-countdown-badge');
+                let refreshBtn = document.getElementById('btn-manual-refresh');
+                let refreshIcon = document.getElementById('refresh-icon');
 
                 if (!select || !countdownDisplay) {
                     return;
                 }
 
-                var defaultInterval = parseInt(select.getAttribute('data-interval') || '120', 10);
-                var savedInterval = localStorage.getItem('heaters_dashboard_refresh_interval');
-                var intervalSeconds = savedInterval !== null ? parseInt(savedInterval, 10) : defaultInterval;
+                let defaultInterval = parseInt(select.getAttribute('data-interval') || '120', 10);
+                let savedInterval = localStorage.getItem('heaters_dashboard_refresh_interval');
+                let intervalSeconds = savedInterval !== null ? parseInt(savedInterval, 10) : defaultInterval;
 
-                var validIntervals = [0, 30, 60, 120, 300, 600];
+                let validIntervals = [0, 30, 60, 120, 300, 600];
                 if (validIntervals.indexOf(intervalSeconds) !== -1) {
                     select.value = intervalSeconds.toString();
                 } else {
@@ -132,18 +132,18 @@
                     intervalSeconds = 120;
                 }
 
-                var remainingSeconds = intervalSeconds;
-                var timerId = null;
-                var isRefreshing = false;
+                let remainingSeconds = intervalSeconds;
+                let timerId = null;
+                let isRefreshing = false;
 
                 function formatTime(secs) {
-                    var m = Math.floor(secs / 60);
-                    var s = secs % 60;
+                    let m = Math.floor(secs / 60);
+                    let s = secs % 60;
                     return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
                 }
 
                 function isUserInteracting() {
-                    var active = document.activeElement;
+                    let active = document.activeElement;
                     if (active && (active.tagName === 'INPUT' || active.tagName === 'SELECT' || active.tagName === 'TEXTAREA')) {
                         if (active !== select) {
                             return true;
